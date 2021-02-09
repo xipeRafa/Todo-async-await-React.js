@@ -1,24 +1,46 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 
-const AddTask = ({ onAdd }) => {
+const AddTask = ({ onAdd,setEdit, Edit,todoEdit,onDelete}) => {
   const [text, setText] = useState('')
   const [day, setDay] = useState('')
   const [reminder, setReminder] = useState(false)
 
-  const onSubmit = (e) => {
-    e.preventDefault()
+  useEffect(() => {
+    if(Edit){setText(Edit.text)}
+    if(Edit){setDay(Edit.day)} 
+   
+  }, [Edit]);
+
+  const onSubmit = () => {
+    
+  
+ 
 
     if (!text) {
       alert('Please add a task')
       return
     }
 
-    onAdd({ text, day, reminder })
+    
+     
+  onAdd({ text, day, reminder })
+
+    if(Edit){onDelete(Edit.id)}
+
+
+  
 
     setText('')
     setDay('')
     setReminder(false)
+
+    setEdit(null)
+   
   }
+
+ 
+
+ 
 
   return (
     <form className='add-form' onSubmit={onSubmit}>
@@ -50,7 +72,10 @@ const AddTask = ({ onAdd }) => {
         />
       </div>
 
-      <input type='submit' value='Save Task' className='btn btn-block' />
+      <button type='submit' className='btn btn-block'>
+            {Edit ? "Edit task":"Save task"} 
+      </button>
+      {Edit?"Editando":"yeaa!!"}
     </form>
   )
 }

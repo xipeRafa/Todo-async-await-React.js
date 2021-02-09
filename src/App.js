@@ -59,9 +59,14 @@ const App = () => {
     await fetch(`http://localhost:5000/tasks/${id}`, {
       method: 'DELETE',
     })
-
+   setTimeout(() => {
     setTasks(tasks.filter((task) => task.id !== id))
+   }, 100);
+      
+  
+   
   }
+   
 
   // Toggle Reminder
   const toggleReminder = async (id) => {
@@ -85,8 +90,21 @@ const App = () => {
     )
   }
 
+const [Edit, setEdit] = useState(null);
+      console.log('89',Edit)
+
+      useEffect(() => {
+        if(Edit){
+          setShowAddTask(!showAddTask)
+        }
+       
+      }, [Edit]);
+
+      
+
   return (
     <Router>
+    
       <div className='container'>
         <Header
           onAdd={() => setShowAddTask(!showAddTask)}
@@ -97,12 +115,16 @@ const App = () => {
           exact
           render={(props) => (
             <>
-              {showAddTask && <AddTask onAdd={addTask} />}
+              {showAddTask && <AddTask onAdd={addTask} setEdit={setEdit} 
+                                       Edit={Edit}  onDelete={deleteTask}/>}
+
               {tasks.length > 0 ? (
                 <Tasks
                   tasks={tasks}
                   onDelete={deleteTask}
                   onToggle={toggleReminder}
+                  setEdit={setEdit}
+                  Edit={Edit}
                 />
               ) : (
                 'No Tasks To Show'
@@ -112,7 +134,9 @@ const App = () => {
         />
         <Route path='/about' component={About} />
         <Footer />
+       
       </div>
+    
     </Router>
   )
 }
